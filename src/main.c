@@ -23,8 +23,8 @@ void main() {
     // Bucle infinito para parpadear el LED
     while (1) {
         gpio[GPIO_SET0 / 4] = PIN21;  // Encender GPIO 21
-        delay(10000000);               // Esperar un tiempo
+        delay(10000000);               
         gpio[GPIO_CLR0 / 4] = PIN21;  // Apagar GPIO 21
-        delay(10000000);               // Esperar un tiempo
+        delay(10000000);               
     }
 }

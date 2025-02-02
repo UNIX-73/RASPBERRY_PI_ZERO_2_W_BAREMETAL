@@ -1,24 +1,35 @@
+SRC_DIR = src
+BUILD_DIR = build
+OBJ_DIR = $(BUILD_DIR)/obj
+BIN_DIR = $(BUILD_DIR)/bin
 
+SRCS = $(wildcard $(SRC_DIR)/*.c)
+OBJS = $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 
+CFLAGS = -Wall -O2 -ffreestanding -nostdinc -nostdlib -nostartfiles -I$(SRC_DIR)
 
-SRCS = $(wildcard *.c)
-OBJS = $(SRCS:.c=.o)
-CFLAGS = -Wall -O2 -ffreestanding -nostdinc -nostdlib -nostartfiles
+CC = aarch64-none-elf-gcc
+LD = aarch64-none-elf-ld
+OBJCOPY = aarch64-none-elf-objcopy
+QEMU = qemu-system-aarch64
 
-all: clean kernel8.img
+all: $(BIN_DIR)/kernel8.img
 
-start.o: start.S
-	aarch64-none-elf-gcc $(CFLAGS) -c start.S -o start.o
+$(OBJ_DIR) $(BIN_DIR):
+	mkdir -p $@
 
-%.o: %.c
-	aarch64-none-elf-gcc $(CFLAGS) -c $< -o $@
+start.o: $(SRC_DIR)/start.S | $(OBJ_DIR)
+	$(CC) $(CFLAGS) -c $(SRC_DIR)/start.S -o $(OBJ_DIR)/start.o
 
-kernel8.img: start.o $(OBJS)
-	aarch64-none-elf-ld -nostdlib start.o $(OBJS) -T linker.ld -o kernel8.elf
-	aarch64-none-elf-objcopy -O binary kernel8.elf kernel8.img
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(BIN_DIR)/kernel8.img: start.o $(OBJS)
+	$(LD) -nostdlib $(OBJ_DIR)/start.o $(OBJS) -T linker.ld -o $(BIN_DIR)/kernel8.elf
+	$(OBJCOPY) -O binary $(BIN_DIR)/kernel8.elf $(BIN_DIR)/kernel8.img
 
 clean:
-	rm kernel8.elf *.o >/dev/null 2>/dev/null || true
+	rm -rf $(BUILD_DIR) kernel8.elf
 
-run:
-	qemu-system-aarch64 -M raspi3b -kernel kernel8.img -d in_asm
+#run: $(BIN_DIR)/kernel8.img
+#	$(QEMU) -M raspi3b -kernel $(BIN_DIR)/kernel8.img -d in_asm
