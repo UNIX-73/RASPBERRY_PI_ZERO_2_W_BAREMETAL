@@ -1,4 +1,4 @@
-#include "gpio/gpio.hpp"
+#include "system_init/system_init.hpp"
 
 // Función de delay (bucle ocupado)
 void delay(uint32_t count)
@@ -12,13 +12,11 @@ void delay(uint32_t count)
 extern "C" void main()
 {
 
-    GPIO::SetFunctionSelect(21, 1);
+    SYSTEM_LOOP systemLoop;
+    systemLoop.InitializeSystem();
 
     while (1)
     {
-        GPIO::ClearPin(21); // Encender GPIO 21
-        delay(5000000);
-        GPIO::SetPin(21); // Encender GPIO 21
-        delay(5000000);
+        asm("nop");
     }
 }
