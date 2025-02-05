@@ -1,8 +1,9 @@
 #include "gpio/gpio.hpp"
+
 // Función de delay (bucle ocupado)
-void delay(int count)
+void delay(uint32_t count)
 {
-    for (volatile int i = 0; i < count; i++)
+    for (volatile uint32_t i = 0; i < count; i++)
     {
         asm("nop"); // Instrucción NOP para evitar optimización
     }
@@ -10,6 +11,7 @@ void delay(int count)
 
 extern "C" void main()
 {
+
     GPIO::SetFunctionSelect(21, 1);
 
     while (1)
