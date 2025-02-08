@@ -1,4 +1,5 @@
 #include "system_init.hpp"
+#include "utils.h"
 
 const void SYSTEM_LOOP::SYSTEM_INIT()
 {
@@ -8,11 +9,15 @@ const void SYSTEM_LOOP::SYSTEM_INIT()
 
 const void SYSTEM_LOOP::SYSTEM_MAIN_LOOP()
 {
+    GPIO::SetFunctionSelect(21, GPIO::FUNCTION_SELECT_OPTIONS::OUTPUT);
+
     while (1)
     {
-        this->RunMainLoopCallbacks();
-
         GPIO::SetPin(21);
+        Utils::Delay(5000000);
+        GPIO::ClearPin(21);
+        Utils::Delay(5000000);
+        this->RunMainLoopCallbacks();
     }
 }
 
