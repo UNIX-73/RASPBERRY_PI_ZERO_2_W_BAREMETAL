@@ -14,9 +14,11 @@ const void SYSTEM_LOOP::SYSTEM_MAIN_LOOP()
     while (1)
     {
         GPIO::SetPin(21);
+        UART::SendString("Hello world\r\n");
         Utils::Delay(5000000);
         GPIO::ClearPin(21);
         Utils::Delay(5000000);
+
         this->RunMainLoopCallbacks();
     }
 }

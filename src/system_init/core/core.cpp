@@ -2,15 +2,10 @@
 
 void CORE::InitializeCore()
 {
-    this->InitializeGPIO();
-}
-
-void CORE::InitializeGPIO()
-{
-    GPIO::SetFunctionSelect(21, 1); //  Para testeo
+    this->InitializeUart();
 }
 
 void CORE::InitializeUart()
 {
-    
+    UART::UartInit();
 }

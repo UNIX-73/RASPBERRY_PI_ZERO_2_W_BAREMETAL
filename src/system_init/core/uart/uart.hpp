@@ -1,5 +1,5 @@
 #include "stdint64.h"
-#include "gpio.hpp"
+#include "../gpio/gpio.hpp"
 
 // Definiciones de direcciones base (ajústalas según tu modelo y configuración)
 #define PERIPHERAL_BASE 0x3F000000 // Puede variar en Pi 4 (0xFE000000)
