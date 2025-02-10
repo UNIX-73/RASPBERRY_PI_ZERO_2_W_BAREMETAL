@@ -20,3 +20,11 @@ extern "C" void main()
         asm("nop");
     }
 }
+
+extern "C" void c_irq_handler()
+{
+    GPIO::SetPin(21);
+
+    UART::SendString("An interruption arrived\r\n");
+    *P_UART0_ICR = (1 << 4);
+}
